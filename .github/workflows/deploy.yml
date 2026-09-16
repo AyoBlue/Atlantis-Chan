@@ -22,41 +22,36 @@ jobs:
                 key: ${{ secrets.SSH_PRIVATE_KEY }}
                 envs: DISCORD_TOKEN
                 script: |
-                  # Ensure the script stops if any command fails
                   set -e
 
-                  if [ ! -d "$HOME/AtlantisChan" ]; then
-                      # Added missing slash after github.com
-                      git clone https://github.com/${{ github.repository }}.git ~/AtlantisChan
+                  if [ ! -d "$HOME/AtlantisChan/.git" ]; then
+                    mkdir -p "$HOME/AtlantisChan"
+                    git clone "https://github.com/${{ github.repository }}.git" "$HOME/AtlantisChan"
                   fi
 
-                  sudo chown -R "$(id -u):$(id -g)" "$HOME/AtlantisChan"
-
-                  # Explicitly change to the directory before running npm
-                  cd ~/AtlantisChan
+                  cd "$HOME/AtlantisChan"
+                  git pull origin main
 
                   umask 077
                   printf 'DISCORD_TOKEN=%s\n' "$DISCORD_TOKEN" > .env
-                  
-                  # If the folder already existed, pull the latest changes
-                  if [ -d ".git" ]; then
-                      git pull origin main
-                  fi
 
                   if [ ! -x ".venv/bin/python" ]; then
-                      python3 -m venv .venv
+                    rm -rf .venv
+                    python3 -m venv .venv
                   fi
 
                   if ! .venv/bin/python -m pip --version >/dev/null 2>&1; then
-                      .venv/bin/python -m ensurepip --upgrade
+                    .venv/bin/python -m ensurepip --upgrade
                   fi
 
-                  .venv/bin/python -m pip install discord.py python-dotenv
+                  .venv/bin/python -m pip install --upgrade discord.py python-dotenv
 
                   PM2="$HOME/.local/bin/pm2"
                   if [ ! -x "$PM2" ]; then
-                      npm install --prefix "$HOME/.local" pm2
+                    mkdir -p "$HOME/.local"
+                    npm install --prefix "$HOME/.local" pm2
                   fi
 
-                  "$PM2" restart atlantis-chan || "$PM2" start bot.py --name atlantis-chan --interpreter .venv/bin/python
+                  "$PM2" delete atlantis-chan 2>/dev/null || true
+                  "$PM2" start bot.py --name atlantis-chan --interpreter "$PWD/.venv/bin/python"
                   "$PM2" save
