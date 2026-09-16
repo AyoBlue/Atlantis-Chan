@@ -1,0 +1,30 @@
+name: Atlantis Chan
+
+on:
+    push:
+        branches:
+            - main
+
+jobs:
+    deploy:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout Code
+              uses: actions/checkout@v4
+            
+            - name: "Deploy via SSH"
+              uses: appleboy/ssh-action@v1.0.3
+              with:
+                host: ${{ secrets.DO_HOST }}
+                username: ${{ secrets.DO_USER }}
+                key: ${{ secrets.DO_SSH_KEY }}
+                script: |
+                    if [ ! -d "$HOME/AtlantisChan" ]; then
+                        git clone https://github.com{{ github.repository }}.git ~/AtlantisChan
+                        cd ~/AtlantisChan
+                    else
+                        cd ~/AtlantisChan
+                        git pull origin main
+                    fi
+
+                    npm install --production
