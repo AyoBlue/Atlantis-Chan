@@ -46,12 +46,10 @@ jobs:
 
                   .venv/bin/python -m pip install --upgrade discord.py python-dotenv
 
-                  PM2="$HOME/.local/bin/pm2"
-                  if [ ! -x "$PM2" ]; then
-                    mkdir -p "$HOME/.local"
-                    npm install --prefix "$HOME/.local" pm2
+                  if ! command -v pm2 >/dev/null 2>&1; then
+                    npm install -g pm2
                   fi
 
-                  "$PM2" delete atlantis-chan 2>/dev/null || true
-                  "$PM2" start bot.py --name atlantis-chan --interpreter "$PWD/.venv/bin/python"
-                  "$PM2" save
+                  pm2 delete atlantis-chan 2>/dev/null || true
+                  pm2 start bot.py --name atlantis-chan --interpreter "$PWD/.venv/bin/python"
+                  pm2 save
