@@ -14,10 +14,13 @@ jobs:
             
             - name: "Deploy via SSH"
               uses: appleboy/ssh-action@v1.0.3
+              env:
+                DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
               with:
                 host: ${{ secrets.VPS_HOST }}
                 username: ${{ secrets.VPS_USER }}
                 key: ${{ secrets.SSH_PRIVATE_KEY }}
+                envs: DISCORD_TOKEN
                 script: |
                   # Ensure the script stops if any command fails
                   set -e
@@ -29,10 +32,26 @@ jobs:
 
                   # Explicitly change to the directory before running npm
                   cd ~/AtlantisChan
+
+                  umask 077
+                  printf 'DISCORD_TOKEN=%s\n' "$DISCORD_TOKEN" > .env
                   
                   # If the folder already existed, pull the latest changes
                   if [ -d ".git" ]; then
                       git pull origin main
                   fi
 
-                  npm install --production
+                  if [ ! -x ".venv/bin/python" ]; then
+                    python3 -m venv .venv
+                  fi
+
+                  .venv/bin/python -m pip install discord.py python-dotenv
+
+                    if ! command -v pm2 >/dev/null 2>&1; then
+                      npm install -g pm2
+                    fi
+
+                    pm2 restart atlantis-chan || pm2 start bot.py --name atlantis-chan --interpreter .venv/bin/python
+                    pm2 save
+
+
