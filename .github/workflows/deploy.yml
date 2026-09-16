@@ -19,12 +19,20 @@ jobs:
                 username: ${{ secrets.VPS_USER }}
                 key: ${{ secrets.SSH_PRIVATE_KEY }}
                 script: |
-                    if [ ! -d "$HOME/AtlantisChan" ]; then
-                        git clone https://github.com{{ github.repository }}.git ~/AtlantisChan
-                        cd ~/AtlantisChan
-                    else
-                        cd ~/AtlantisChan
-                        git pull origin main
-                    fi
+                  # Ensure the script stops if any command fails
+                  set -e
 
-                    npm install --production
+                  if [ ! -d "$HOME/AtlantisChan" ]; then
+                      # Added missing slash after github.com
+                      git clone https://github.com{{ github.repository }}.git ~/AtlantisChan
+                  fi
+
+                  # Explicitly change to the directory before running npm
+                  cd ~/AtlantisChan
+                  
+                  # If the folder already existed, pull the latest changes
+                  if [ -d ".git" ]; then
+                      git pull origin main
+                  fi
+
+                  npm install --production
