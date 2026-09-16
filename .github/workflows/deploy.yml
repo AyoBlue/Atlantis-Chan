@@ -42,14 +42,18 @@ jobs:
                   fi
 
                   if [ ! -x ".venv/bin/python" ]; then
-                    python3 -m venv .venv
+                      python3 -m venv .venv
+                  fi
+
+                  if ! .venv/bin/python -m pip --version >/dev/null 2>&1; then
+                      .venv/bin/python -m ensurepip --upgrade
                   fi
 
                   .venv/bin/python -m pip install discord.py python-dotenv
 
-                    if ! command -v pm2 >/dev/null 2>&1; then
+                  if ! command -v pm2 >/dev/null 2>&1; then
                       npm install -g pm2
-                    fi
+                  fi
 
-                    pm2 restart atlantis-chan || pm2 start bot.py --name atlantis-chan --interpreter .venv/bin/python
-                    pm2 save
+                  pm2 restart atlantis-chan || pm2 start bot.py --name atlantis-chan --interpreter .venv/bin/python
+                  pm2 save
