@@ -24,7 +24,7 @@ jobs:
 
                   if [ ! -d "$HOME/AtlantisChan" ]; then
                       # Added missing slash after github.com
-                      git clone https://github.com{{ github.repository }}.git ~/AtlantisChan
+                      git clone https://github.com/${{ github.repository }}.git ~/AtlantisChan
                   fi
 
                   # Explicitly change to the directory before running npm
