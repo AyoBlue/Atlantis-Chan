@@ -53,10 +53,10 @@ jobs:
 
                   .venv/bin/python -m pip install discord.py python-dotenv
 
-                  export PATH="$HOME/.local/bin:$PATH"
-                  if ! command -v pm2 >/dev/null 2>&1; then
+                  PM2="$HOME/.local/bin/pm2"
+                  if [ ! -x "$PM2" ]; then
                       npm install --prefix "$HOME/.local" pm2
                   fi
 
-                  pm2 restart atlantis-chan || pm2 start bot.py --name atlantis-chan --interpreter .venv/bin/python
-                  pm2 save
+                  "$PM2" restart atlantis-chan || "$PM2" start bot.py --name atlantis-chan --interpreter .venv/bin/python
+                  "$PM2" save
