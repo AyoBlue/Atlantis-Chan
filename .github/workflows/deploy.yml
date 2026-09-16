@@ -53,5 +53,3 @@ jobs:
 
                     pm2 restart atlantis-chan || pm2 start bot.py --name atlantis-chan --interpreter .venv/bin/python
                     pm2 save
-
-
