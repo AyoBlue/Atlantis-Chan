@@ -44,11 +44,11 @@ class PatchNotes(commands.Cog):
                 description = info["yoast_head_json"]["og_description"],
                 color = discord.Color.blue()
             )
-            embed.set_image(url=patch["featuredImage"])
             embed.set_author(name="Atlantis Chan", icon_url=self.bot.user.avatar.url)
+            embed.set_image(url=patch["featuredImage"])
             embed.set_footer(text="Brawlhalla Patch Notes")
 
             await channel.send(embed=embed)
-            
+
 async def setup(bot: commands.Bot):
     await bot.add_cog(PatchNotes(bot))
