@@ -14,7 +14,7 @@ class Chat(commands.Cog):
         if self.bot.user in message.mentions:
             async with message.channel.typing():
                 prompt = ollama.chat(
-                    model = "llama3.2",
+                    model = "qwen2.5:1.5b",
                     messages = [
                         {"role": "system", "content": "Respond to the user as a cute anime girl with a playful, teasing, and flirty personality. Keep responses short and sweet."},
                         {"role": "user", "content": message.content}
