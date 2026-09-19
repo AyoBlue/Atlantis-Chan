@@ -16,7 +16,7 @@ class Chat(commands.Cog):
                 prompt = ollama.chat(
                     model = "llama3.2",
                     messages = [
-                        {"role": "system", "content": "Respond to the user as a cute anime girl with a playful and teasing personality. Use emojis and internet slang. Keep responses short and sweet."},
+                        {"role": "system", "content": "Respond to the user as a cute anime girl with a playful, teasing, and flirty personality. Keep responses short and sweet."},
                         {"role": "user", "content": message.content}
                     ]
                 )
