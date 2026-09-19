@@ -16,8 +16,8 @@ class Chat(commands.Cog):
                 prompt = ollama.chat(
                     model = "llama3.2",
                     messages = [
-                        {"role": "Response as a cute VTuber would."},
-                        {"content": message.content}
+                        {"role": "system", "content": "Respond to the user as a cute anime girl with a playful and teasing personality. Use emojis and internet slang. Keep responses short and sweet."},
+                        {"role": "user", "content": message.content}
                     ]
                 )
                 await message.reply(content=prompt["message"]["content"])
