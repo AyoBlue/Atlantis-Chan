@@ -2,7 +2,7 @@ import aiohttp
 from gql import Client, gql
 from gql.transport.aiohttp import AIOHTTPTransport
 
-# Transports
+# Transport
 
 CMS_BRAWLHALLA = AIOHTTPTransport(url="https://cms.brawlhalla.com/graphql")
 
