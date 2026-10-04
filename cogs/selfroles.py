@@ -16,6 +16,7 @@ REGION_ROLES = {
 GAME_ROLES = {
     "brawlhalla": 1556417761469800458,
     "minecraft": 1556417768083955712,
+    "roblox": 1556441213949706301,
     "among_us": 1556417771695378505
 }
 
