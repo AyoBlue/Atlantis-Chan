@@ -22,6 +22,8 @@ class PatchNotes(commands.Cog):
             return
 
         patch_notes = await brawlhalla.get_patch_notes()
+        patch_notes.reverse()
+        
         messages = [message async for message in channel.history(limit=10)]
 
         for patch in patch_notes:
