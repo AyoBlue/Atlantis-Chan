@@ -21,7 +21,7 @@ class PatchNotes(commands.Cog):
         if not(channel):
             return
 
-        patch_notes = await brawlhalla.get_patch_notes()
+        patch_notes = await brawlhalla.patch.get_patch_notes()
         patch_notes.reverse()
         
         messages = [message async for message in channel.history(limit=10)]
@@ -36,7 +36,7 @@ class PatchNotes(commands.Cog):
             if sent:
                 continue
 
-            info = await brawlhalla.get_patch(patch["slug"])
+            info = await brawlhalla.patch.get_patch(patch["slug"])
             if not(info):
                 continue
 
